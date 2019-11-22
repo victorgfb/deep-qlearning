@@ -35,16 +35,16 @@ def main():
 
     agent = DeepQlearning(learning_rate=learning_rate, discount=discout, iterations=iteracoes)
 
-    # setup simulation
+  
     dungeon = ToySimulator()
-    total_reward = 0 # Score keeping
+    total_reward = 0 
     last_total = 0
     step = 0
     sucessCount = 0
     failCount = 0
     count = 0
 
-    # main loop
+
     while(count < iteracoes):
 
         old_state = deepcopy(dungeon.state) 

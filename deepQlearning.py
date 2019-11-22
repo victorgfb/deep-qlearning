@@ -94,7 +94,7 @@ class DeepQlearning:
 
     def update(self, old_state, new_state, action, reward):
        
-        if((new_state[0] < self.length) and (new_state[0] >= 0) and (new_state[1] < self.length) and (new_state[1] >= 0)):
+        if(reward != -100):
             self.train(old_state, action, reward, new_state)
         else:
             self.reset(old_state, action, reward, new_state)
