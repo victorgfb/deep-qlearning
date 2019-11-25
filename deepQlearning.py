@@ -11,7 +11,7 @@ class DeepQlearning:
         self.exploration_rate = 1.0 
         self.exploration_delta = 1/iterations 
 
-        self.input_count = 36
+        self.input_count = 2
         self.output_count = 4
 
         self.session = tf.Session()
@@ -22,10 +22,9 @@ class DeepQlearning:
     def define_model(self):
         self.model_input = tf.placeholder(dtype=tf.float32, shape=[None, self.input_count])
 
-        fc1 = tf.layers.dense(self.model_input, 8, activation=tf.sigmoid, kernel_initializer=tf.constant_initializer(np.zeros((self.input_count, 8))))
-        fc2 = tf.layers.dense(fc1, 8, activation=tf.sigmoid, kernel_initializer=tf.constant_initializer(np.zeros((8, self.output_count))))
-
-        self.model_output = tf.layers.dense(fc2, self.output_count)
+        fc1 = tf.layers.dense(self.model_input, 4, activation=tf.sigmoid, kernel_initializer=tf.constant_initializer(np.zeros((self.input_count, 4))))
+      
+        self.model_output = tf.layers.dense(fc1, self.output_count)
 
         self.target_output = tf.placeholder(shape=[None, self.output_count], dtype=tf.float32)
 
@@ -36,14 +35,15 @@ class DeepQlearning:
         self.initializer = tf.global_variables_initializer()
 
     def get_Q(self, state):
-        return self.session.run(self.model_output, feed_dict={self.model_input: self.to_one_hot(state)})[0]
+        return self.session.run(self.model_output, feed_dict={self.model_input: self.to_input(state)})[0]
 
-    def to_one_hot(self, state):
-        one_hot = np.zeros((1, 36))
+    def to_input(self, state):
+        input = np.zeros((1, 2))
         #print(state)
-        one_hot[0, [state[0] + state[1]*6]] = 1
-        #print(one_hot)
-        return one_hot
+        input[0, [0]] = state[0]/5
+        input[0, [1]] = state[1]/5
+        #print(input)
+        return input
 
     def get_next_action(self, state):
         if random.random() > self.exploration_rate: 
@@ -71,7 +71,7 @@ class DeepQlearning:
         new_state_Q_values = [0,0,0,0,0,0]
         #print(reward)
         old_state_Q_values[action] = reward + self.discount * np.amax(new_state_Q_values)
-        training_input = self.to_one_hot(old_state)
+        training_input = self.to_input(old_state)
         target_output = [old_state_Q_values]
         training_data = {self.model_input: training_input, self.target_output: target_output}
         self.session.run(self.optimizer, feed_dict=training_data)
@@ -84,7 +84,7 @@ class DeepQlearning:
         
         old_state_Q_values[action] = reward + self.discount * np.amax(new_state_Q_values)
        
-        training_input = self.to_one_hot(old_state)
+        training_input = self.to_input(old_state)
         
         target_output = [old_state_Q_values]
         
