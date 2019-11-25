@@ -22,8 +22,8 @@ class DeepQlearning:
     def define_model(self):
         self.model_input = tf.placeholder(dtype=tf.float32, shape=[None, self.input_count])
 
-        fc1 = tf.layers.dense(self.model_input, 16, activation=tf.sigmoid, kernel_initializer=tf.constant_initializer(np.zeros((self.input_count, 16))))
-        fc2 = tf.layers.dense(fc1, 16, activation=tf.sigmoid, kernel_initializer=tf.constant_initializer(np.zeros((16, self.output_count))))
+        fc1 = tf.layers.dense(self.model_input, 8, activation=tf.sigmoid, kernel_initializer=tf.constant_initializer(np.zeros((self.input_count, 8))))
+        fc2 = tf.layers.dense(fc1, 8, activation=tf.sigmoid, kernel_initializer=tf.constant_initializer(np.zeros((8, self.output_count))))
 
         self.model_output = tf.layers.dense(fc2, self.output_count)
 
@@ -94,7 +94,7 @@ class DeepQlearning:
 
     def update(self, old_state, new_state, action, reward):
        
-        if(reward != -100):
+        if(reward != -10):
             self.train(old_state, action, reward, new_state)
         else:
             self.reset(old_state, action, reward, new_state)

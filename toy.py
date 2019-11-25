@@ -30,17 +30,19 @@ class ToySimulator:
 
 
         if((self.state[0] >= self.length) or (self.state[0] < 0)):
-            reward = -100
+            reward = -10
         elif ((self.state[1] >= self.length) or (self.state[1] < 0)):
-            reward = -100
+            reward = -10
         else:
             if(self.diff(self.state, self.oldState)):
-                reward = 10
+                reward = 5
             else:
                 reward = 0
+        if(self.state[0] == 5 and self.state == 5):
+            reward = 100
 
-        # if(self.state[1] < 5 and self.state[0] == 1):
-        #     reward = -100
+        # if(self.state[1] < 3 and self.state[0] == 1):
+        #     reward = -5
 
         return self.state, reward
 

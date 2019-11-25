@@ -21,7 +21,7 @@ def fit(agent):
             print(state)
             print(agent.get_Q(state))
             if(new_state[0] >= 6) or new_state[1] >= 6 or new_state[0] < 0 or new_state[1] < 0:
-                print("droga")
+                print("ops")
                 return False
             state = deepcopy(new_state)
         print("AEEEEEE")
@@ -29,8 +29,8 @@ def fit(agent):
         return True
 
 def main():
-    iteracoes = 100000
-    discout =  0.95
+    iteracoes = 1000000
+    discout =  0.75
     learning_rate = 0.001
 
     agent = DeepQlearning(learning_rate=learning_rate, discount=discout, iterations=iteracoes)
@@ -74,7 +74,6 @@ def main():
             total_reward = 0
         if(fit(agent)):
             print("olha só")
-            fit(agent)
             break
 
 if __name__ == "__main__":
