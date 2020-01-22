@@ -10,8 +10,7 @@ def fit(agent):
     for _ in range(1):
         step = 0
         state = [0,0]
-        #print("----------")
-        #print(state)
+     
         dungeon = ToySimulator()
         while(state[0] != 5 or state[1] != 5):
             step+=1
@@ -25,53 +24,33 @@ def fit(agent):
                 return False
             state = deepcopy(new_state)
         print("AEEEEEE")
-        #print(step)
         return True
 
 def main():
-    iteracoes = 1000000
+    max_iteracoes = 1000000
     discout =  0.75
     learning_rate = 0.001
 
-    agent = DeepQlearning(learning_rate=learning_rate, discount=discout, iterations=iteracoes)
+    agent = DeepQlearning(learning_rate=learning_rate, discount=discout, iterations=max_iteracoes)
 
-  
     dungeon = ToySimulator()
-    total_reward = 0 
-    last_total = 0
-    step = 0
-    sucessCount = 0
-    failCount = 0
     count = 0
 
-
-    while(count < iteracoes):
-
+    while(count < max_iteracoes):
+        count+=1
         old_state = deepcopy(dungeon.state) 
         action = agent.get_next_action(old_state) 
         new_state, reward = dungeon.take_action(action)
-        #print(new_state)
+        
         if(new_state[0] == 5 and new_state[1] == 5):
             print("sucess")
-            sucessCount += 1
-            count += 1
             dungeon.reset()
 
         result = agent.update(deepcopy(old_state), deepcopy(new_state), action, reward) 
-        total_reward += reward 
-        
+
         if(not result):
-            failCount+=1
             dungeon.reset()
             
-        count += 1
-        if((count % 250) == 0):
-            performance = (total_reward - last_total) / 250
-            print(json.dumps({'step': step, "performance" : performance, 'total_reward': total_reward}))
-            print(sucessCount)
-            sucessCount = 0
-            last_total = total_reward
-            total_reward = 0
         if(fit(agent)):
             print("olha só")
             break
